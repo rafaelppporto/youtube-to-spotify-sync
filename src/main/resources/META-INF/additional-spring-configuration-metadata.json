@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "youtube.api.url",
+      "type": "java.lang.String",
+      "description": "Youtube DATA API url'"
+    },
+    {
+      "name": "youtube.max-results",
+      "type": "java.lang.String",
+      "description": "Max results per page"
+    },
+    {
+      "name": "youtube.api.key",
+      "type": "java.lang.String",
+      "description": "Personal key for Youtube DATA API"
+    }
+  ]
+}
