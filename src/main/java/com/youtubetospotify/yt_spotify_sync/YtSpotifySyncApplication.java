@@ -13,5 +13,3 @@ public class YtSpotifySyncApplication {
 	
 
 }
-
-// AIzaSyBFMWNwYG2e3cJApSD5ui2ed7sFpnL6duM

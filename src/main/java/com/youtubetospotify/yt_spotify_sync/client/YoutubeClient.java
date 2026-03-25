@@ -1,36 +1,54 @@
 package com.youtubetospotify.yt_spotify_sync.client;
 
-import org.springframework.web.client.RestTemplate;
-
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+@Component
 public class YoutubeClient {
 
-    private static final String API_KEY = "AIzaSyBFMWNwYG2e3cJApSD5ui2ed7sFpnL6duM";
+    @Value("${youtube.api.url}")
+    private String apiUrl;
+
+    @Value("${youtube.max-results}")
+    private String maxResults;
+
+    @Value("${youtube.api.part}")
+    private String part;
+
+    @Value("${youtube.api.key}")
+    private String apiKey;
+
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @SuppressWarnings("unchecked")
     public List<Map<String, Object>> getPlaylistItems(String playlistId) {
 
-        String url = "https://www.googleapis.com/youtube/v3/playlistItems"
-                + "?part=snippet"
-                + "&maxResults=50"
+        String url = apiUrl
+                + "?part=" + part
+                + "&maxResults=" + maxResults
                 + "&playlistId=" + playlistId
-                + "&key=" + API_KEY;
+                + "&key=" + apiKey;
 
-        RestTemplate restTemplate = new RestTemplate();
+        String url2 = UriComponentsBuilder.fromUriString(apiUrl)
+                                            .queryParam("part", part)
+                                            .queryParam("maxResults", maxResults)
+                                            .queryParam("playlistId", playlistId)
+                                            .queryParam("key", apiKey)
+                                            .toUriString();
 
-        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+
+        Map<String, Object> response =
+                restTemplate.getForObject(url, Map.class);
 
         if (response == null || !response.containsKey("items")) {
             return List.of();
         }
 
-        Object itemsObj = response.get("items");
-
-        // cast controlado
-        List<Map<String, Object>> items = (List<Map<String, Object>>) itemsObj;
-
-        return items;
+        return (List<Map<String, Object>>) response.get("items");
     }
 }

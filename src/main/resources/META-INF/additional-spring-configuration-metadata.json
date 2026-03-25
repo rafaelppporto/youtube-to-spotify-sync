@@ -3,17 +3,22 @@
     {
       "name": "youtube.api.url",
       "type": "java.lang.String",
-      "description": "Youtube DATA API url'"
+      "description": "Base URL for YouTube Data API v3 playlistItems endpoint"
+    },
+    {
+      "name": "youtube.api.part",
+      "type": "java.lang.String",
+      "description": "Specifies the resource parts to include in the API response (e.g. snippet)"
     },
     {
       "name": "youtube.max-results",
-      "type": "java.lang.String",
-      "description": "Max results per page"
+      "type": "java.lang.Integer",
+      "description": "Maximum number of results returned per API request (max 50)"
     },
     {
       "name": "youtube.api.key",
       "type": "java.lang.String",
-      "description": "Personal key for Youtube DATA API"
+      "description": "API key used to authenticate requests to YouTube Data API v3"
     }
   ]
 }
