@@ -10,7 +10,11 @@ import java.util.List;
 @RequestMapping("/playlist")
 public class PlaylistController {
 
-    private final YoutubeService service = new YoutubeService();
+    private final YoutubeService service;
+
+    public PlaylistController(YoutubeService service) {
+        this.service = service;
+    }
 
     @GetMapping("/extract")
     public List<String> extract(@RequestParam String url) {
@@ -18,7 +22,7 @@ public class PlaylistController {
         String playlistId = YoutubeUtils.extractPlaylistId(url);
 
         if (playlistId == null) {
-            return List.of("URL inválida");
+            return List.of("Invalid URL");
         }
 
         return service.getTitles(playlistId);
