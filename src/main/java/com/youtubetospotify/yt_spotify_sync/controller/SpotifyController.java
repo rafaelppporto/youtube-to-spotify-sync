@@ -1,42 +1,49 @@
 package com.youtubetospotify.yt_spotify_sync.controller;
 
-import java.io.IOException;
-import java.util.Map;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.youtubetospotify.yt_spotify_sync.model.TrackInfo;
 import com.youtubetospotify.yt_spotify_sync.service.SpotifyAuthService;
-
-import jakarta.servlet.http.HttpServletResponse;
+import com.youtubetospotify.yt_spotify_sync.service.SpotifyService;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
+@RequestMapping("/spotify")
 public class SpotifyController {
 
-    private final SpotifyAuthService spotifyAuthService;
+    private final SpotifyAuthService authService;
+    private final SpotifyService spotifyService;
 
-    public SpotifyController(SpotifyAuthService spotifyAuthService) {
-        this.spotifyAuthService = spotifyAuthService;
+    public SpotifyController(SpotifyAuthService authService, SpotifyService spotifyService) {
+        this.authService = authService;
+        this.spotifyService = spotifyService;
     }
 
-    // STEP 1 - Login
-    @GetMapping("/spotify/login")
-    public void login(HttpServletResponse response) throws IOException {
-        response.sendRedirect(spotifyAuthService.generateAuthUrl());
+    /**
+     * Endpoint to start Spotify OAuth login
+     */
+    @GetMapping("/login")
+    public String login() {
+        return authService.getLoginUrl();
     }
 
-    // STEP 2 - Callback
-    @GetMapping("/spotify/callback")
-    public Map<String, Object> callback(@RequestParam String code) {
-        return spotifyAuthService.exchangeCodeForToken(code);
+    /**
+     * Callback endpoint to receive Spotify authorization code
+     */
+    @GetMapping("/callback")
+    public String callback(@RequestParam String code) {
+        String accessToken = authService.getAccessToken(code);
+        return "Access Token: " + accessToken;
     }
 
-    // STEP 3 - Get current user info via Authorization header
-    @GetMapping("/spotify/me")
-    public Map<String, Object> me(@RequestHeader("Authorization") String authHeader) {
-        String token = authHeader.replace("Bearer ", "");
-        return spotifyAuthService.getCurrentUser(token);
+    /**
+     * Create a playlist on Spotify with user-selected tracks
+     */
+    @PostMapping("/create-playlist")
+    public String createPlaylist(
+            @RequestParam String userId,
+            @RequestParam String playlistName,
+            @RequestBody List<TrackInfo> tracks) {
+
+        return spotifyService.createPlaylistForUser(userId, playlistName, tracks);
     }
 }

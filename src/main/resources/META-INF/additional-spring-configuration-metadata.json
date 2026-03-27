@@ -21,17 +21,17 @@
       "description": "API key used to authenticate requests to YouTube Data API v3"
     },
     {
-      "name": "spotify.client.id",
+      "name": "spotify.client-id",
       "type": "java.lang.String",
       "description": "Spotify application Client ID used for OAuth authentication"
     },
     {
-      "name": "spotify.redirect.uri",
+      "name": "spotify.redirect-uri",
       "type": "java.lang.String",
       "description": "Redirect URI registered in Spotify Developer Dashboard for OAuth callbacks"
     },
     {
-      "name": "spotify.client.secret",
+      "name": "spotify.client-secret",
       "type": "java.lang.String",
       "description": "Spotify application Client Secret used to exchange authorization code for access token (keep it secure)"
     }
