@@ -35,7 +35,8 @@ public class SpotifyAuthService {
     }
 
     // STEP 2 - Exchange code for access token
-    public String exchangeCodeForToken(String code) {
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> exchangeCodeForToken(String code) {
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -56,11 +57,7 @@ public class SpotifyAuthService {
 
         ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
 
-        if (response.getBody() == null) {
-            return "Error: Empty response from Spotify";
-        }
-
-        return response.getBody().toString();
+        return response.getBody();
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })

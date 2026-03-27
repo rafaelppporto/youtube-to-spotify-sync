@@ -1,28 +1,37 @@
 package com.youtubetospotify.yt_spotify_sync.controller;
 
-import com.youtubetospotify.yt_spotify_sync.service.SpotifyAuthService;
+import java.util.Map;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.youtubetospotify.yt_spotify_sync.service.SpotifyAuthService;
+
 @RestController
 public class SpotifyController {
 
-    private final SpotifyAuthService authService;
+    private final SpotifyAuthService spotifyAuthService;
 
-    public SpotifyController(SpotifyAuthService authService) {
-        this.authService = authService;
+    public SpotifyController(SpotifyAuthService spotifyAuthService) {
+        this.spotifyAuthService = spotifyAuthService;
     }
 
-    // STEP 1 → generate login URL
+    // STEP 1 - Login
     @GetMapping("/spotify/login")
     public String login() {
-        return authService.generateAuthUrl();
+        return spotifyAuthService.generateAuthUrl();
     }
 
-    // STEP 2 → receive code from Spotify
-    @GetMapping("/callback")
-    public String callback(@RequestParam String code) {
-        return "Authorization code: " + code;
+    // STEP 2 - Callback (returns token response)
+    @GetMapping("/spotify/callback")
+    public Map<String, Object> callback(@RequestParam String code) {
+        return spotifyAuthService.exchangeCodeForToken(code);
+    }
+
+    // STEP 3 - Get user profile (needs accessToken)
+    @GetMapping("/spotify/me")
+    public Map<String, Object> me(@RequestParam String accessToken) {
+        return spotifyAuthService.getCurrentUser(accessToken);
     }
 }
