@@ -31,7 +31,8 @@ public class SpotifyAuthService {
                 + "?client_id=" + clientId
                 + "&response_type=code"
                 + "&redirect_uri=" + URLEncoder.encode(redirectUri, StandardCharsets.UTF_8)
-                + "&scope=" + URLEncoder.encode(scope, StandardCharsets.UTF_8);
+                + "&scope=" + URLEncoder.encode(scope, StandardCharsets.UTF_8)
+                + "&show_dialog=true";
     }
 
     // STEP 2 - Exchange code for access token
@@ -44,7 +45,7 @@ public class SpotifyAuthService {
 
         String body = "grant_type=authorization_code"
                 + "&code=" + code
-                + "&redirect_uri=" + redirectUri;
+                + "&redirect_uri=" + URLEncoder.encode(redirectUri, StandardCharsets.UTF_8);
 
         String auth = clientId + ":" + clientSecret;
         String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes());
@@ -60,6 +61,7 @@ public class SpotifyAuthService {
         return response.getBody();
     }
 
+    // STEP 3 - Get current user info
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public Map<String, Object> getCurrentUser(String accessToken) {
 
