@@ -8,13 +8,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+
+// TODO /playlist -> /youtube and adjust in insomnia for tests
 @RequestMapping("/playlist")
-public class PlaylistController {
+public class YoutubeController {
 
-    private final YoutubeService service;
+    private final YoutubeService youtubeService;
 
-    public PlaylistController(YoutubeService service) {
-        this.service = service;
+    public YoutubeController(YoutubeService youtubeService) {
+        this.youtubeService = youtubeService;
     }
 
     @GetMapping("/extract")
@@ -26,6 +28,6 @@ public class PlaylistController {
             return List.of(new TrackInfo("", "Invalid URL", ""));
         }
 
-        return service.getTracks(playlistId);
+        return youtubeService.getTracks(playlistId);
     }
 }

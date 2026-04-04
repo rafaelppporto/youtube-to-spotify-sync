@@ -11,16 +11,29 @@ import com.youtubetospotify.yt_spotify_sync.model.TrackInfo;
 @Service
 public class YoutubeService {
 
-    private final YoutubeClient client;
+    private final YoutubeClient youtubeClient;
 
-    public YoutubeService(YoutubeClient client) {
-        this.client = client;
+    public YoutubeService(YoutubeClient youtubeClient) {
+        this.youtubeClient = youtubeClient;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<String> getRawTitles(String playlistId) {
+
+        return youtubeClient.getPlaylistItems(playlistId).stream()
+                .map(item -> {
+                    Map<String, Object> snippet = (Map<String, Object>) item.get("snippet");
+                    return snippet != null
+                            ? snippet.get("title").toString()
+                            : "";
+                })
+                .toList();
     }
 
     @SuppressWarnings("unchecked")
     public List<TrackInfo> getTracks(String playlistId) {
 
-        return client.getPlaylistItems(playlistId).stream()
+        return youtubeClient.getPlaylistItems(playlistId).stream()
                 .map(item -> {
 
                     Map<String, Object> snippet = (Map<String, Object>) item.get("snippet");
@@ -135,5 +148,9 @@ public class YoutubeService {
 
         // fallback
         return new String[] { "", title };
+    }
+
+    public List<String> getPlaylistItemsUsingAI(String playlistId) {
+        return null;
     }
 }

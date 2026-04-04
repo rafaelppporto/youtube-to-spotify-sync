@@ -20,6 +20,7 @@
       "type": "java.lang.String",
       "description": "API key used to authenticate requests to YouTube Data API v3"
     },
+
     {
       "name": "spotify.client-id",
       "type": "java.lang.String",
@@ -34,6 +35,12 @@
       "name": "spotify.client-secret",
       "type": "java.lang.String",
       "description": "Spotify application Client Secret used to exchange authorization code for access token (keep it secure)"
+    },
+
+    {
+      "name": "gemini.api-key",
+      "type": "java.lang.String",
+      "description": "API key used to authenticate requests to Gemini API"
     }
   ]
 }
